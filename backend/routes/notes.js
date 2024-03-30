@@ -1,19 +1,20 @@
-const getNotesByEmail = require("../controllers/notes.controller")
+const {getNotesByEmail, postNewNote, patchNoteById, deleteNoteById }= require("../controllers/notes.controller")
 
 const express = require('express')
+const { removeNoteById } = require("../models/notes.model")
 
 const router = express.Router()
 
 //GET all notes
-router.get('/', getNotesByEmail)
+router.get('/:email', getNotesByEmail)
 
 //POST new note
-router.post('/', () => {})
+router.post('/', postNewNote)
 
 //UPDATE existing note
-router.patch('/:id', () => {})
+router.patch('/:id', patchNoteById)
 
 // DELETE a note
-router.delete('/:id', () => {})
+router.delete('/:id', deleteNoteById)
 
 module.exports = router

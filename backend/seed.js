@@ -13,7 +13,7 @@ const connectToDb = async () => {
 }
 
   const seedNotes = [
-    {
+    { 
       title: 'Workout',
       content: '5 x Dumbell presses',
       category: 'Fitness',
@@ -43,6 +43,7 @@ const connectToDb = async () => {
     console.log('Seeding DB...')
     await Note.deleteMany({})
     await Note.insertMany(seedNotes)
+    console.log('Finished seeding DB')
   }
   
   module.exports = {seedDb, connectToDb}
