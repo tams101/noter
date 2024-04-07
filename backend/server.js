@@ -4,8 +4,11 @@ const mongoose = require('mongoose')
 const noteRoutes = require('./routes/notes')
 const userRoutes = require('./routes/users')
 const invalidPath = require('./errorHandling')
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors())
 
 app.use(express.json())
 
