@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const mongoose = require('mongoose')
 const Note = require('./schemas/note.schema.js')
+const User = require('./schemas/user.schema.js')
 
 const connectToDb = async () => {
   try {
@@ -39,10 +40,23 @@ const connectToDb = async () => {
     },
   ]
 
+  const seedUsers = [
+    {
+      email: 'testing@example.com',
+      password: 'password'
+    },
+    {
+      email: 'testing2@example.com',
+      password: 'passworD'
+    }
+  ]
+
   const seedDb = async () => {
     console.log('Seeding DB...')
     await Note.deleteMany({})
     await Note.insertMany(seedNotes)
+    await User.deleteMany({})
+    await User.insertMany(seedUsers)
     console.log('Finished seeding DB')
   }
   
