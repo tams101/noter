@@ -15,3 +15,7 @@ export function addNote(newNote) {
 export function deleteNote(id) {
   return axios.delete(`http://localhost:4000/api/notes/${id}`)
 }
+
+export function register(email, password) {
+  return axios.post('http://localhost:4000/api/user/register', {email, password})
+}
