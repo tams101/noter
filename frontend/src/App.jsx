@@ -3,7 +3,9 @@ import Homepage from './pages/Homepage'
 
 function App() {
   return (
-    <Homepage />
+    <div className='app-container'>
+      <Homepage />
+    </div>
   )
 }
 
