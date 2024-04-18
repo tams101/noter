@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 //Routes
 app.use('/api/notes', noteRoutes)
 
-// app.use('/api/users', userRoutes)
+app.use('/api/user', userRoutes)
 
 app.all("*", invalidPath)
 

@@ -130,3 +130,117 @@ describe("/api/notes", () => {
       })
   })
 });
+
+describe("/api/user/register", () => {
+  test("POST: 201 add a new user", async () => {
+    const newUser = {
+      email: 'joe@example.com',
+      password: 'lemonade'
+    }
+
+    const res = await request(app).post('/api/user/register').send(newUser)
+    
+    const user = res.body
+
+    expect(res.status).toBe(201)
+    expect(user.email).toBe('joe@example.com')
+    expect(typeof user.token).toBe('string')
+  });
+  test("POST: 400 when given a malformed body", async () => {
+    const newUser = {
+      email: '',
+      password: ''
+    }
+
+    const res = await request(app).post('/api/user/register').send(newUser)
+    
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('All fields must be completed')
+  });
+  test("POST: 400 when email is already registered", async () => {
+    const newUser = {
+      email: 'testing@example.com',
+      password: 'passwoArd123AA'
+    }
+
+    const res = await request(app).post('/api/user/register').send(newUser)
+    
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Email is already registered')
+  })
+  test("POST: 400 when password is less than 8 characters", async () => {
+    const newUser = {
+      email: 'testing@example.com',
+      password: 'passwor'
+    }
+
+    const res = await request(app).post('/api/user/register').send(newUser)
+    
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Password must be at least 8 characters')
+  })
+});
+
+describe.only("/api/user/login", () => {
+  test("POST: 200 login successfully", async () => {
+    const newUser = {
+      email: 'joe@example.com',
+      password: 'lemonade'
+    }
+
+    await request(app).post('/api/user/register').send(newUser)
+
+    const login = {
+      email: 'joe@example.com',
+      password: 'lemonade'
+    }
+
+    const res = await request(app).post('/api/user/login').send(login)
+
+    const user = res.body
+
+    expect(res.status).toBe(200)
+    expect(user.email).toBe('joe@example.com')
+    expect(typeof user.token).toBe('string')
+  });
+  test('POST: 400 when given an incorrect email', async () => {
+    const login = {
+      email: 'joe@example.com',
+      password: 'lemonade'
+    }
+
+    const res = await request(app).post('/api/user/login').send(login)
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Incorrect email')
+  });
+  test("POST: 400 when given a malformed body", async () => {
+    const login = {
+      email: '',
+      password: ''
+    }
+
+    const res = await request(app).post('/api/user/login').send(login)
+    
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('All fields must be completed')
+  });
+  test("POST: 400 when given an incorrect password", async () => {
+    const newUser = {
+      email: 'joe@example.com',
+      password: 'lemonade'
+    }
+
+    await request(app).post('/api/user/register').send(newUser)
+
+    const login = {
+      email: 'joe@example.com',
+      password: 'lemonadelemonade'
+    }
+
+    const res = await request(app).post('/api/user/login').send(login)
+
+    expect(res.status).toBe(400)
+    expect(res.body.error).toBe('Incorrect password')
+  })
+})
