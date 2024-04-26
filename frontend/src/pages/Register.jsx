@@ -1,6 +1,7 @@
 import { useState, useContext } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { register } from "../../utils/api"
+import useLogout from "../../hooks/useLogout"
 
 function Register() {
   const [email, setEmail] = useState('')
@@ -8,6 +9,7 @@ function Register() {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const {dispatch} = useContext(AuthContext)
+  const {logout} = useLogout()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,27 +31,27 @@ function Register() {
     }
 
   }
-
+ 
   return (
-    <form className="register" onSubmit={handleSubmit}>
-      <h3>Register</h3>
-      <label htmlFor="email">Email:</label>
-      <input 
-        type="email" 
-        onChange={(e) => {setEmail(e.target.value)}} 
-        value={email} 
-      />
+      <form className="register" onSubmit={handleSubmit}>
+        <h3>Register</h3>
+        <label htmlFor="email">Email:</label>
+        <input 
+          type="email" 
+          onChange={(e) => {setEmail(e.target.value)}} 
+          value={email} 
+        />
 
-    <label htmlFor="password">Password:</label>
-      <input 
-        type="password" 
-        onChange={(e) => {setPassword(e.target.value)}} 
-        value={password} 
-      />
+      <label htmlFor="password">Password:</label>
+        <input 
+          type="password" 
+          onChange={(e) => {setPassword(e.target.value)}} 
+          value={password} 
+        />
 
-      <button>Create Account</button>
-      {error && <div className="error">{error}</div>}
-    </form>
+        <button disabled={isLoading}>Create Account</button>
+        {error && <div className="error">{error}</div>}
+      </form>
   )
 }
 
