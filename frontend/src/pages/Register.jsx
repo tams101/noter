@@ -1,7 +1,7 @@
 import { useState, useContext } from "react"
 import { AuthContext } from "../../context/AuthContext"
 import { register } from "../../utils/api"
-import useLogout from "../../hooks/useLogout"
+
 
 function Register() {
   const [email, setEmail] = useState('')
@@ -9,7 +9,6 @@ function Register() {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const {dispatch} = useContext(AuthContext)
-  const {logout} = useLogout()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
