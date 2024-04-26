@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { addNote, fetchNotes } from "../../utils/api"
 import NoteList from "../components/NoteList"
+import {AuthContext} from "../../context/AuthContext"
 
 function Homepage() {
 
@@ -9,21 +10,32 @@ function Homepage() {
   const [category, setCategory] = useState('')
   const [content, setContent] = useState('')
   const [error, setError] = useState('')
+  const {dispatch, user} = useContext(AuthContext)
 
   useEffect(() => {
-    fetchNotes('test@example.com').then((data) => {
-      console.log(data)
-      setNotes(data)
-    })
-  }, [])
+    if(user) {
+      fetchNotes(user).then((data) => {
+        console.log(data)
+        setNotes(data)
+      })
+
+    }
+  }, [dispatch, user])
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const newNote = {email: 'test@example.com', title, category, content}
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
+    const newNote = {email: user.email, title, category, content}
 
     setNotes((prevNotes) => [...prevNotes, {title, category, content}])
-    addNote(newNote).then((res) => {
+
+
+    addNote(user, newNote).then((res) => {
       setError('')
     }).catch((err) => {
       setError('Something went wrong. Please try again.')

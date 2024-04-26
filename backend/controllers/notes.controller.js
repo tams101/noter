@@ -25,6 +25,7 @@ const postNewNote = async (req, res, next) => {
   if(emptyFields.length > 0) return res.status(400).send({msg: 'Please complete all fields'})
 
   try {
+    const user_id = req.user._id
     const note = await addNewNote(title, content, category, email)
     res.status(201).send({note})
   } catch (error) {
