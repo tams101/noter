@@ -1,12 +1,32 @@
-import { useState } from "react"
-
-
+import { useState, useContext } from "react"
+import {AuthContext} from "../../context/AuthContext"
+import { login } from "../../utils/api"
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const {dispatch} = useContext(AuthContext)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const res = await login(email, password)
+      console.log(res)
+      localStorage.setItem('user', JSON.stringify(res.data))
+      setIsLoading(false)
+
+      dispatch({type: 'LOGIN', payload: res.data})
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+      setError(error.response.data.error)
+    }
+
   }
 
   return (
@@ -26,7 +46,8 @@ function Login() {
         value={password} 
       />
 
-      <button>Login</button>
+      <button disabled={isLoading}>Login</button>
+      {error && <div className="error">{error}</div>}
     </form>
   )
 }
