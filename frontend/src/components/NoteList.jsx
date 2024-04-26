@@ -1,9 +1,15 @@
 import { deleteNote } from "../../utils/api"
+import { useContext } from "react"
+import { AuthContext } from "../../context/AuthContext"
 
 function NoteList({note, setNotes}) {
+  const {user} = useContext(AuthContext)
 
   const handleDelete = () => {
-    deleteNote(note._id).then((res) => {
+    if(!user) {
+      return
+    }
+    deleteNote(user, note._id).then((res) => {
       setNotes((prevNotes) => {
         return prevNotes.filter((n) => n._id !== note._id )
       })

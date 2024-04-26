@@ -1,9 +1,12 @@
 const {getNotesByEmail, postNewNote, patchNoteById, deleteNoteById }= require("../controllers/notes.controller")
+const requireAuth = require('../requireAuth')
 
 const express = require('express')
 const { removeNoteById } = require("../models/notes.model")
 
 const router = express.Router()
+
+router.use(requireAuth)
 
 //GET all notes
 router.get('/:email', getNotesByEmail)
